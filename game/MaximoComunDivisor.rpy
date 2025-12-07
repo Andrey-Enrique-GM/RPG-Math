@@ -62,10 +62,10 @@ label MaximoComunDivisor:
     # -------------------------
     # VARIABLES DEL JUEGO
     # -------------------------
-    default level_mcd = 1
-    default current_num1_mcd = 0
-    default current_num2_mcd = 0
-    default current_options_mcd = []
+    default level_mcd = 1 # Nivel inicial
+    default current_num1_mcd = 0 # Primer número actual
+    default current_num2_mcd = 0 # Segundo número actual
+    default current_options_mcd = [] # Opciones actuales para la pregunta
     default correct_answer_mcd = 0
     default last_message_mcd = ""
 
@@ -104,16 +104,16 @@ label MaximoComunDivisor:
             selected = current_options_mcd[index]
 
             if selected == correct_answer_mcd:
-                last_message_mcd = "¡Correcto! Avanzas al siguiente nivel."
+                last_message_mcd = "Bien hecho, puedes avanzar al siguiente nivel."
                 level_mcd += 1
                 renpy.play("bien.wav")
-                renpy.hide("sayori-neutral")
-                renpy.show("sayori-bien", at_list=[Position(xalign=1.15, yalign=1.0)])
+                renpy.hide("sasaki-neutral")
+                renpy.show("sasaki-bien", at_list=[Position(xalign=1.14, yalign=1.0)])
             else:
-                last_message_mcd = "Incorrecto."
+                last_message_mcd = "Uy, incorrecto."
                 renpy.play("mal.wav")
-                renpy.hide("sayori-neutral")
-                renpy.show("sayori-mal", at_list=[Position(xalign=1.15, yalign=1.0)])
+                renpy.hide("sasaki-neutral")
+                renpy.show("sasaki-mal", at_list=[Position(xalign=1.14, yalign=1.0)])
 
             renpy.jump("resultado_mcd")
 
@@ -122,8 +122,8 @@ label MaximoComunDivisor:
     # -------------------------
     label play_mcd:
 
-        hide sayori-bien
-        show sayori-neutral at Position(xalign=1.15, yalign=1.0)
+        hide sasaki-bien
+        show sasaki-neutral at Position(xalign=1.14, yalign=1.0)
         $ current_num1_mcd, current_num2_mcd, current_options_mcd, correct_answer_mcd = generate_question(level_mcd)
         call screen question_screen_mcd
         return
@@ -133,17 +133,18 @@ label MaximoComunDivisor:
     # -------------------------
     label resultado_mcd:
 
-        if last_message_mcd == "¡Correcto! Avanzas al siguiente nivel.":
-            s "[last_message_mcd]"
+        if last_message_mcd == "Bien hecho, puedes avanzar al siguiente nivel.":
+            sasaki "[last_message_mcd]"
             jump play_mcd
         else:
-            s "[last_message_mcd]"
-            s "El MCD correcto era: [correct_answer_mcd]"
+            sasaki "[last_message_mcd]"
+            sasaki "El MCD correcto era: [correct_answer_mcd]"
             menu:
-                s "¿Qué quieres hacer?"
+                sasaki "Elige, ¿Qué quieres hacer?"
 
                 "Reintentar (volver a Nivel 1)":
                     $ level_mcd = 1
+                    hide sasaki-mal
                     jump play_mcd
 
                 "Salir al menú principal":

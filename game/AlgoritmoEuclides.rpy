@@ -12,17 +12,20 @@ label AlgoritmoEuclides:
         # FUNCIONES DE LoGICA
         # -------------------------
 
+        # Funcion para determinar el MCD usando el Algoritmo de Euclides
         def gcd(a, b):
             while b:
                 a, b = b, a % b
             return a
 
+        # Funcion para simplificar fracciones
         def simplify_fraction(n, d):
             if d == 0:
                 return n, d
             g = gcd(n, d)
             return n // g, d // g
 
+        # Funcion para generar opciones incorrectas
         def generate_incorrect_option(correct_n, correct_d, level):
             while True:
                 mod = max(1, level // 2 + 1)
@@ -34,6 +37,7 @@ label AlgoritmoEuclides:
                     if (sn, sd) != (correct_n, correct_d):
                         return (n, d)
 
+        # Funcion para generar una pregunta
         def generate_question(level):
             min_val = 2 + (level - 1) * 3
             max_val = 50 + (level - 1) * 10
@@ -63,12 +67,12 @@ label AlgoritmoEuclides:
     # -------------------------
     # VARIABLES DEL JUEGO
     # -------------------------
-    default level_ae = 1
-    default current_original_n_ae = 0
-    default current_original_d_ae = 0
-    default current_options_ae = []
+    default level_ae = 1 # Nivel inicial
+    default current_original_n_ae = 0 # Numerador original de la fracción
+    default current_original_d_ae = 0 # Denominador original de la fracción
+    default current_options_ae = [] # Opciones actuales para la pregunta
     default correct_answer_ae = (0, 0)
-    default last_message_ae = ""
+    default last_message_ae = "" 
 
 
     # -------------------------
@@ -109,16 +113,20 @@ label AlgoritmoEuclides:
             if selected == correct_answer_ae:
                 last_message_ae = "¡Correcto! Avanzas al siguiente nivel."
                 level_ae += 1
-                # Reproducir sonido de acierto y una sayori feliz :D
+                # Reproducir sonido de acierto y una expresion feliz :D
                 renpy.play("bien.wav")
-                renpy.hide("sayori-neutral")
-                renpy.show("sayori-bien", at_list=[Position(xalign=0.9, yalign=1.0)])
+                renpy.hide("sasaki-neutral2")
+                renpy.hide("akira-neutral2")
+                renpy.show("sasaki-bien2", at_list=[Position(xalign=1.0, yalign=1.0)])
+                renpy.show("akira-bien2", at_list=[Position(xalign=0.0, yalign=1.0)])
 
             else:
                 last_message_ae = "Incorrecto."
                 renpy.play("mal.wav")
-                renpy.hide("sayori-neutral")
-                renpy.show("sayori-mal", at_list=[Position(xalign=0.9, yalign=1.0)])
+                renpy.hide("sasaki-neutral2")
+                renpy.hide("akira-neutral2")
+                renpy.show("sasaki-mal2", at_list=[Position(xalign=1.0, yalign=1.0)])
+                renpy.show("akira-mal2", at_list=[Position(xalign=0.0, yalign=1.0)])
 
             renpy.jump("resultado_ae")
 
@@ -128,8 +136,10 @@ label AlgoritmoEuclides:
     # -------------------------
     label play_ae:
 
-        hide sayori-bien
-        show sayori-neutral at Position(xalign=0.9, yalign=1.0)
+        hide sasaki-bien2
+        hide akira-bien2
+        show sasaki-neutral2 at Position(xalign=1.0, yalign=1.0)
+        show akira-neutral2 at Position(xalign=0.0, yalign=1.0)
         # Generar pregunta nueva
         $ current_original_n_ae, current_original_d_ae, current_options_ae, correct_answer_ae = generate_question(level_ae)
 
@@ -143,18 +153,20 @@ label AlgoritmoEuclides:
     # -------------------------
     label resultado_ae:
 
+        # Mostrar resultado
         if last_message_ae == "¡Correcto! Avanzas al siguiente nivel.":
-            s "[last_message_ae]"
+            sasaki "[last_message_ae]"
             jump play_ae
         else:
-            s "[last_message_ae]"
-            s "La respuesta correcta era: [correct_answer_ae[0]]/[correct_answer_ae[1]]"
-
+            sasaki "[last_message_ae]"
+            sasaki "La respuesta correcta era: [correct_answer_ae[0]]/[correct_answer_ae[1]]"
             menu:
-                s "¿Que quieres hacer?"
+                akira "¿Que quieres hacer?"
 
                 "Reintentar (volver a Nivel 1)":
                     $ level_ae = 1
+                    hide sasaki-mal2
+                    hide akira-mal2
                     jump play_ae
 
                 "Salir al menu principal":

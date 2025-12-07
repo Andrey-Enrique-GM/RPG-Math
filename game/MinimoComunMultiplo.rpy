@@ -39,11 +39,11 @@ label MinimoComunMultiplo:
                 choice = random.randint(0,2)
                 option = correct
                 if choice == 0:
-                    # Pequeña variación
+                    # Pequeña variacion
                     mods = [-10,-5,5,10]
                     option = correct + random.choice([m for m in mods if correct + m > 0])
                 elif choice == 1 and cycles:
-                    # Factor o múltiplo
+                    # Factor o multiplo
                     c = random.choice(cycles)
                     if correct % c == 0 and correct // c > 1:
                         option = correct // c
@@ -77,12 +77,11 @@ label MinimoComunMultiplo:
     # -------------------------
     # VARIABLES DEL JUEGO
     # -------------------------
-    default level_mcm = 1
-    default current_cycles_mcm = []
-    default current_options_mcm = []
+    default level_mcm = 1 # Nivel inicial
+    default current_cycles_mcm = [] # Ciclos actuales de los dispositivos
+    default current_options_mcm = [] # Opciones actuales para la pregunta
     default correct_answer_mcm = 0
     default last_message_mcm = ""
-
 
     # -------------------------
     # PANTALLA DE PREGUNTA
@@ -120,16 +119,16 @@ label MinimoComunMultiplo:
             selected = current_options_mcm[index]
 
             if selected == correct_answer_mcm:
-                last_message_mcm = "¡Correcto! Avanzas al siguiente nivel."
+                last_message_mcm = "¡Muy bien! Avanzaste al siguiente nivel."
                 level_mcm += 1
                 renpy.play("bien.wav")
-                renpy.hide("sayori-neutral")
-                renpy.show("sayori-bien", at_list=[Position(xalign=1.15, yalign=1.0)])
+                renpy.hide("akira-neutral")
+                renpy.show("akira-bien", at_list=[Position(xalign=-0.2, yalign=1.0)])
             else:
-                last_message_mcm = "Incorrecto."
+                last_message_mcm = "Incorrecto, ¿Error de dedo?"
                 renpy.play("mal.wav")
-                renpy.hide("sayori-neutral")
-                renpy.show("sayori-mal", at_list=[Position(xalign=1.15, yalign=1.0)])
+                renpy.hide("akira-neutral")
+                renpy.show("akira-mal", at_list=[Position(xalign=-0.2, yalign=1.0)])
 
             renpy.jump("resultado_mcm")
 
@@ -139,8 +138,8 @@ label MinimoComunMultiplo:
     # -------------------------
     label play_mcm:
 
-        hide sayori-bien
-        show sayori-neutral at Position(xalign=1.15, yalign=1.0)
+        hide akira-bien
+        show akira-neutral at Position(xalign=-0.2, yalign=1.0)
         $ current_cycles_mcm, current_options_mcm, correct_answer_mcm = generate_question(level_mcm)
         call screen question_screen_mcm
         return
@@ -151,17 +150,19 @@ label MinimoComunMultiplo:
     # -------------------------
     label resultado_mcm:
 
-        if last_message_mcm == "¡Correcto! Avanzas al siguiente nivel.":
-            s "[last_message_mcm]"
+        # Mostrar resultado
+        if last_message_mcm == "¡Muy bien! Avanzaste al siguiente nivel.":
+            akira "[last_message_mcm]"
             jump play_mcm
         else:
-            s "[last_message_mcm]"
-            s "La respuesta correcta era: [correct_answer_mcm]"
+            akira "[last_message_mcm]"
+            akira "La respuesta correcta era: [correct_answer_mcm]"
             menu:
-                s "¿Qué quieres hacer?"
+                akira "¿Qué quieres hacer?"
 
                 "Reintentar (volver a Nivel 1)":
                     $ level_mcm = 1
+                    hide akira-mal
                     jump play_mcm
 
                 "Salir al menu principal":
